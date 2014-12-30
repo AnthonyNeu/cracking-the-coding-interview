@@ -4,7 +4,7 @@ where each pixel in the image is 4 bytes, write a method to rotate the image by 
 import java.lang.*;
 
 
-//Each pixel is 4 bytes, so we can assume that int can be used to store it
+//Each pixel is 4 bytes, so we can assume that int can be used to store it in one int
 public class Main {
     public static int randomInt(int n)
     {
