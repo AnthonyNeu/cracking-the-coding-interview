@@ -1,54 +1,62 @@
-/*Question 1.4 Write a method to replace all spaces in a string with'%20'.
-You may assume that the string has sufficient space at the end of the string to hold the additional characters,
-and that you are given the "true" length of the string.*/
+/*Question 1.5 Implement a method to perform basic string compression using the counts of repeated characters.
+For example, the string aabcccccaaa would become a2blc5a3.
+If the "compressed" string would not become smaller than the original string, your method should return the original string.*/
 
 import java.lang.*;
 
 public class Main {
-    public static void replaceSpaces(char[] s,int length)
+    public static int countCompression(String str)
     {
-        int spaceNumber = 0;
-        for(int i =0; i<length;i++) {
-            char temp = s[i];
-            if (temp == ' ')
-                spaceNumber++;
+        if(str.length() == 0) return 0;
+        int count = 1;
+        int compressionLength = 0;
+        char[] str_char = str.toCharArray();
+        char previous = str_char[0];
+        for(int i = 1 ; i< str.length();i++) {
+            if (str_char[i] == previous)
+                count++;
+            else {
+                compressionLength += 2;
+                count = 1;
+            }
+            previous = str_char[i];
         }
-        int index = length + spaceNumber * 2;
-        s[index] = '\0';
-        for(int i = length -1 ; i>=0;i--)
+        return compressionLength + 2;
+    }
+
+    public static String compressString(String str)
+    {
+        int compressionLength = countCompression(str);
+
+        if(compressionLength >= str.length())
+            return str;
+
+        String compressionString = "";
+        int index = 0;
+        char[] str_char = str.toCharArray();
+        char previous = str_char[0];
+        int count = 1;
+        for(int i = 1 ; i< str.length();i++)
         {
-            if(s[i] == ' ')
-            {
-                s[index - 1] = '0';
-                s[index - 2] = '2';
-                s[index - 3] = '%';
-                index = index - 3;
+            if(str_char[i] == previous)
+                count++;
+            else {
+                compressionString = compressionString + str_char[i-1] + Integer.toString(count);
+                index = index + 2;
+                count = 1;
             }
-            else
-            {
-                s[index-1] = s[i];
-                index --;
-            }
+            previous = str_char[i];
         }
+        return compressionString + str_char[str.length()-1] + Integer.toString(count);
     }
-
-    public static String charToString(char[] s)
-    {
-        String result = "";
-        for(char temp : s) {
-            result = result + Character.toString(temp);
-        }
-        return result;
-    }
-
 
     public static void main(String[] args) {
-        String str = "abc d e f";
-        char[] arr = new char[str.length() + 3 * 2 + 1];
-        for (int i = 0; i < str.length(); i++) {
-            arr[i] = str.charAt(i);
-        }
-        replaceSpaces(arr, str.length());
-        System.out.println("\"" +charToString(arr) +"\"");
+        String str = "abbccccccdee";
+        int length = countCompression(str);
+        String str2 = compressString(str);
+        System.out.println("Compression: " + str);
+        System.out.println("Old String (len = " + str.length() + "): " + str);
+        System.out.println("New String (len = " + str2.length() + "): " + str2);
+        System.out.println("Potential Compression: " + length);
     }
 }
