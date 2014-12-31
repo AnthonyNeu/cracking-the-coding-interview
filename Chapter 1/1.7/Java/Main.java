@@ -2,8 +2,6 @@
 
 import java.lang.*;
 
-
-//Each pixel is 4 bytes, so we can assume that int can be used to store it
 public class Main {
     public static int randomInt(int n)
     {
