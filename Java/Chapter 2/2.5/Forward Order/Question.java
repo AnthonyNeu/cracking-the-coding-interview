@@ -50,6 +50,7 @@ public class Question {
         }
     }
 
+    //use to let two arrays have the same length
     private static LinkedListNode padList(LinkedListNode l, int padding) {
         LinkedListNode head = l;
         for (int i = 0; i < padding; i++) {
@@ -69,6 +70,7 @@ public class Question {
         }
         return node;
     }
+
 
     public static int ListToInt(LinkedListNode s,boolean isReverse)
     {
@@ -100,6 +102,7 @@ public class Question {
         LinkedListNode lA1 = new LinkedListNode(9, null, null);
         LinkedListNode lA2 = new LinkedListNode(9, null, lA1);
         LinkedListNode lA3 = new LinkedListNode(9, null, lA2);
+        LinkedListNode lA4 = new LinkedListNode(9, null, lA3);
 
         LinkedListNode lB1 = new LinkedListNode(1, null, null);
         LinkedListNode lB2 = new LinkedListNode(0, null, lB1);
