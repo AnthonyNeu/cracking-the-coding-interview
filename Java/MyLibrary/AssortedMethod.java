@@ -23,4 +23,12 @@ public class AssortedMethod {
         }
         return root;
     }
+
+    public static String arrayToString(int[] array) {
+        StringBuilder sb = new StringBuilder();
+        for (int v : array) {
+            sb.append(v + ", ");
+        }
+        return sb.toString();
+    }
 }
