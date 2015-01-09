@@ -14,6 +14,7 @@ public class Question {
             return root.height();
     }
 
+    //this method is wrong as it cannot detect linklist-like tree
     public static boolean isBalanced(TreeNode root) {
         if(root == null)
             return true;
@@ -26,12 +27,36 @@ public class Question {
         }
     }
 
+
+
+    public static int MaxDepth(TreeNode root)
+    {
+        if(root == null)
+            return 0;
+        else
+            return 1+Math.max(MaxDepth(root.left),MaxDepth(root.right));
+    }
+
+    public static int MinDepth(TreeNode root)
+    {
+        if(root ==null)
+            return Integer.MAX_VALUE;
+        else if(root.left == null && root.right ==null)
+            return 1;
+        else
+            return 1+Math.min(MinDepth(root.left), MinDepth(root.right));
+    }
+
+    public static boolean isBalanced1(TreeNode root) {
+        return MaxDepth(root) - MinDepth(root) <=1;
+    }
+
     public static void main(String[] args) {
         // Create balanced tree
         int[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         TreeNode root = TreeNode.createMinimalBST(array);
         System.out.println("Root? " + root.data);
-        System.out.println("Is balanced? " + isBalanced(root));
+        System.out.println("Is balanced? " + isBalanced1(root));
 
         // Could be balanced, actually, but it's very unlikely...
         TreeNode unbalanced = new TreeNode(10);
@@ -39,7 +64,15 @@ public class Question {
             unbalanced.insertInOrder(AssortedMethod.randomIntInRange(0, 100));
         }
         System.out.println("Root? " + unbalanced.data);
-        System.out.println("Is balanced? " + isBalanced(unbalanced));
+        System.out.println("Is balanced? " + isBalanced1(unbalanced));
+
+        TreeNode LinkList = new TreeNode(3);
+        LinkList.insertInOrder(1);
+        LinkList.insertInOrder(2);
+        LinkList.insertInOrder(3);
+        System.out.println("Root? " + LinkList.data);
+        System.out.println("Is balanced? " + isBalanced1(LinkList));
+        System.out.println("Is balanced? " + isBalanced(LinkList));
     }
 }
 
