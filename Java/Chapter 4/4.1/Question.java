@@ -3,6 +3,34 @@ For the purposes of this question,
 a balanced tree is defined to be a tree such that the heights of the two subtrees of any node never differ by more than one.
  */
 
+
+//To make it clear, the general definition of balanced tree is:
+/*
+The constraint is generally applied recursively to every subtree. That is, the tree is only balanced if:
+
+The left and right subtrees' heights differ by at most one, AND
+The left subtree is balanced, AND
+The right subtree is balanced
+According to this, the next tree is balanced:
+
+     A
+   /   \
+  B     C
+ /     / \
+D     E   F
+     /
+    G
+The next one is not balanced because the subtrees of C differ by 2 in their height:
+
+     A
+   /   \
+  B     C   <-- difference = 2
+ /     /
+D     E
+     /
+    G
+Source:http://stackoverflow.com/questions/8015630/definition-of-a-balanced-tree
+ */
 import MyLibrary.TreeNode;
 import MyLibrary.AssortedMethod;
 
@@ -41,6 +69,7 @@ public class Question {
     {
         if(root ==null)
             return Integer.MAX_VALUE;
+        //this means we already find a leave node
         else if(root.left == null && root.right ==null)
             return 1;
         else
