@@ -5,7 +5,7 @@
 The answer from the book has a easy way to do it:
 We count the number of ones and number of zeros between the first one to the last one, and rearrange the number by the number.
 
-An alternative way to solve the problem is
+An alternative way to solve the problem is to do the bit manipulation by arithmetic.
  */
 
 public class Question {
