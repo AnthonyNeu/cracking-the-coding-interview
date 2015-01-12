@@ -9,7 +9,7 @@ Output:N = 10001001100
  */
 
 public class Question {
-    int updateBits(int m,int n,int i,int j)
+    public static int updateBits(int m,int n,int i,int j)
     {
         //digit start from 0 to 31
         if(i>=32 | j<i)
@@ -21,14 +21,15 @@ public class Question {
         int mask = left | right;
 
         //clear the bits between i and j
-        int n_cleared = n|mask;
+        int n_cleared = n&mask;
         int m_shifted = m<<i;
 
         return n_cleared | m_shifted;
     }
 
     public static void main(String [] args){
-
+        int result = updateBits(-128,-3,2,6);
+        System.out.println(result);
     }
 }
 
