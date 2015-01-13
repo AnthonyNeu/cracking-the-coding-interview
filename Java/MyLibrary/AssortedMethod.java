@@ -32,6 +32,16 @@ public class AssortedMethod {
         return sb.toString();
     }
 
+    public static String toFullBinaryString(int a) {
+        String s = "";
+        for (int i = 0; i < 32; i++) {
+            Integer lsb = new Integer(a & 1);
+            s = lsb.toString() + s;
+            a = a >> 1;
+        }
+        return s;
+    }
+
     /* Creates tree by mapping the array left to right, top to bottom. */
     public static TreeNode createTreeFromArray(int[] array) {
         if (array.length > 0) {
@@ -60,5 +70,14 @@ public class AssortedMethod {
         } else {
             return null;
         }
+    }
+
+    public static TreeNode randomBST(int N, int min, int max) {
+        int d = randomIntInRange(min, max);
+        TreeNode root = new TreeNode(d);
+        for (int i = 1; i < N; i++) {
+            root.insertInOrder(randomIntInRange(min, max));
+        }
+        return root;
     }
 }
