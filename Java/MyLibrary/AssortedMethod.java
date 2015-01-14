@@ -24,6 +24,14 @@ public class AssortedMethod {
         return root;
     }
 
+    public static int[] randomArray(int N, int min, int max) {
+        int[] array = new int[N];
+        for (int j = 0; j < N; j++) {
+            array[j] = randomIntInRange(min, max);
+        }
+        return array;
+    }
+
     public static int[][] randomMatrix(int M, int N, int min, int max) {
         int[][] matrix = new int[M][N];
         for (int i = 0; i < M; i++) {
