@@ -130,6 +130,13 @@ public class AssortedMethod {
         }
     }
 
+    public static void printIntArray(int[] array) {
+        for (int i = 0; i < array.length; i++) {
+            System.out.print(array[i] + " ");
+        }
+        System.out.println("");
+    }
+
     public static String listOfPointsToString(ArrayList<Point> list) {
         StringBuilder buffer = new StringBuilder();
         for (Point p : list) {
@@ -138,4 +145,11 @@ public class AssortedMethod {
         return buffer.toString();
     }
 
+    public static String stringArrayToString(String[] array) {
+        StringBuilder sb = new StringBuilder();
+        for (String v : array) {
+            sb.append(v + ", ");
+        }
+        return sb.toString();
+    }
 }
