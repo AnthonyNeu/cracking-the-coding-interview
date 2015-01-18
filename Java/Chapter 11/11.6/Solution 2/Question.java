@@ -1,112 +1,88 @@
-/*Question 11.7 A circus is designing a tower routine consisting of people standing atop one another's shoulders.
-For practical and aesthetic reasons, each person must be both shorter and lighter than the person below him or her.
-Given the heights and weights of each person in the circus, write a method to compute the largest possible number of people in such a tower.*/
+/*Question 11.6 Given an M X N matrix in which each row and each column is sorted in ascending order, write a method to find an element.*/
 
 
 /*
-Answer:
-We can sort the height of these people and then use the way to find the longest increasing subsequence of weights in the corresponding array.
+ Answer 2:The second way is more complicated. We divide the matrix into 4 small matrix. The top left element and the right bottom element is the smallest and the biggest element in the matrix. We compare the target with the two elements and deicide to search one matrix of the 4 pieces for the target. 
  */
 
-import java.util.*;
-
+import MyLibrary.*;
 
 public class Question {
-    // Returns longer sequence
-    private static ArrayList<HtWt> seqWithMaxLength(ArrayList<HtWt> seq1, ArrayList<HtWt> seq2) {
-        if (seq1 == null) {
-            return seq2;
-        } else if (seq2 == null) {
-            return seq1;
-        }
-        return seq1.size() > seq2.size() ? seq1 : seq2;
-    }
+	
+	public static Coordinate partitionAndSearch(int[][] matrix, Coordinate origin, Coordinate dest, Coordinate pivot, int elem) {
+		Coordinate lowerLeftOrigin = new Coordinate(pivot.row, origin.column);
+		Coordinate lowerLeftDest = new Coordinate(dest.row, pivot.column - 1);
+		Coordinate upperRightOrigin = new Coordinate(origin.row, pivot.column);
+		Coordinate upperRightDest = new Coordinate(pivot.row - 1, dest.column);
+		
+		Coordinate lowerLeft = findElement(matrix, lowerLeftOrigin, lowerLeftDest, elem);
+		if (lowerLeft == null) {
+			return findElement(matrix, upperRightOrigin, upperRightDest, elem);
+		}
+		return lowerLeft;
+	}
+	
+	public static Coordinate findElement(int[][] matrix, Coordinate origin, Coordinate dest, int x) {
+		if (!origin.inbounds(matrix) || !dest.inbounds(matrix)) {
+			return null;
+		}
+		if (matrix[origin.row][origin.column] == x) {
+			return origin;
+		} else if (!origin.isBefore(dest)) {
+			return null;
+		}
+		
+		/* Set start to start of diagonal and end to the end of the diagonal. Since
+		 * the grid may not be square, the end of the diagonal may not equal dest.
+		 */
+		Coordinate start = (Coordinate) origin.clone();
+		int diagDist = Math.min(dest.row - origin.row, dest.column - origin.column);
+		Coordinate end = new Coordinate(start.row + diagDist, start.column + diagDist);
+		Coordinate p = new Coordinate(0, 0);
+		
+		/* Do binary search on the diagonal, looking for the first element greater than x */
+		while (start.isBefore(end)) {
+			p.setToAverage(start, end);
+			if (x > matrix[p.row][p.column]) {
+				start.row = p.row + 1;
+				start.column = p.column + 1;
+			} else {
+				end.row = p.row - 1;
+				end.column = p.column - 1;
+			}
+		}
+		
+		/* Split the grid into quadrants. Search the bottom left and the top right. */ 
+		return partitionAndSearch(matrix, origin, dest, start, x);
+	}
+	
+	public static Coordinate findElement(int[][] matrix, int x) {
+		Coordinate origin = new Coordinate(0, 0);
+		Coordinate dest = new Coordinate(matrix.length - 1, matrix[0].length - 1);
+		return findElement(matrix, origin, dest, x);
+	}
+	
+	public static void main(String[] args) {
+		int[][] matrix = {{15, 30,  50,  70,  73}, 
+				 	 	  {35, 40, 100, 102, 120},
+				 	 	  {36, 42, 105, 110, 125},
+				 	 	  {46, 51, 106, 111, 130},
+				 	 	  {48, 55, 109, 140, 150}};
+	
+		AssortedMethod.printMatrix(matrix);
+		int m = matrix.length;
+		int n = matrix[0].length;
+		
+		int count = 0;
+		int littleOverTheMax = matrix[m - 1][n - 1] + 10;
+		for (int i = 0; i < littleOverTheMax; i++) {
+			Coordinate c = findElement(matrix, i);
+			if (c != null) {
+				System.out.println(i + ": (" + c.row + ", " + c.column + ")");
+				count++;
+			}
+		}
+		System.out.println("Found " + count + " unique elements.");
+	}
 
-    private static void longestIncreasingSubsequence(ArrayList<HtWt> array, ArrayList<HtWt>[] solutions, int current_index) {
-        if (current_index >= array.size() || current_index < 0) {
-            return;
-        }
-        HtWt current_element = array.get(current_index);
-
-        // Find longest sequence that we can append current_element to
-        ArrayList<HtWt> best_sequence = null;
-        for (int i = 0; i < current_index; i++) {
-            if (array.get(i).isBefore(current_element)) { // If current_element is bigger than list tail
-                best_sequence = seqWithMaxLength(best_sequence, solutions[i]); // Set best_sequence to our new max
-            }
-        }
-
-        // Append current_element
-        ArrayList<HtWt> new_solution = new ArrayList<HtWt>();
-        if (best_sequence != null) {
-            new_solution.addAll(best_sequence);
-        }
-        new_solution.add(current_element);
-
-        // Add to list and recurse
-        solutions[current_index] = new_solution;
-        longestIncreasingSubsequence(array, solutions, current_index + 1);
-    }
-
-    private static ArrayList<HtWt> longestIncreasingSubsequence(ArrayList<HtWt> array) {
-        ArrayList<HtWt>[] solutions = new ArrayList[array.size()];
-        longestIncreasingSubsequence(array, solutions, 0);
-
-        ArrayList<HtWt> best_sequence = null;
-        for (int i = 0; i < array.size(); i++) {
-            best_sequence = seqWithMaxLength(best_sequence, solutions[i]);
-        }
-
-        return best_sequence;
-    }
-
-    public static ArrayList<HtWt> initialize() {
-        ArrayList<HtWt> items = new ArrayList<HtWt>();
-
-        HtWt item = new HtWt(65, 60);
-        items.add(item);
-
-        item = new HtWt(70, 150);
-        items.add(item);
-
-        item = new HtWt(56, 90);
-        items.add(item);
-
-        item = new HtWt(75, 190);
-        items.add(item);
-
-        item = new HtWt(60, 95);
-        items.add(item);
-
-        item = new HtWt(68, 110);
-        items.add(item);
-
-        item = new HtWt(35, 65);
-        items.add(item);
-
-        item = new HtWt(40, 60);
-        items.add(item);
-
-        item = new HtWt(45, 63);
-        items.add(item);
-
-        return items;
-    }
-
-    public static void printList(ArrayList<HtWt> list) {
-        for (HtWt item : list) {
-            System.out.println(item.toString() + " ");
-        }
-    }
-
-    public static ArrayList<HtWt> getIncreasingSequence(ArrayList<HtWt> items) {
-        Collections.sort(items);
-        return longestIncreasingSubsequence(items);
-    }
-
-    public static void main(String[] args) {
-        ArrayList<HtWt> items = initialize();
-        ArrayList<HtWt> solution = getIncreasingSequence(items);
-        printList(solution);
-    }
 }
