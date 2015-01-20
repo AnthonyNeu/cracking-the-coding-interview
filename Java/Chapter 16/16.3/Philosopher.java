@@ -3,6 +3,7 @@ import MyLibrary.AssortedMethod;
 
 public class Philosopher extends Thread {
     private final int maxPause = 100;
+    //number of bites to finish eating
     private int bites = 10;
 
     private Chopstick left;
@@ -15,23 +16,24 @@ public class Philosopher extends Thread {
     }
 
     public void eat() {
-        System.out.println("Philosopher " + index + ": start eating");
-        if (pickUp()) {
+        System.out.println("Philosopher " + index + " start eating");
+        if(pickUp())
+        {
             chew();
             putDown();
-            System.out.println("Philosopher " + index + ": done eating");
-        } else {
-            System.out.println("Philosopher " + index + ": gave up on eating");
+            System.out.println("Philosopher " + index + " done eating");
         }
+        else
+            System.out.println("Philosopher " + index + " give up eating");
     }
 
     public boolean pickUp() {
         pause();
-        if (!left.pickUp()) {
+        if(!left.pickUp())
             return false;
-        }
         pause();
-        if (!right.pickUp()) {
+        if(!right.pickUp())
+        {
             left.putDown();
             return false;
         }
@@ -40,7 +42,7 @@ public class Philosopher extends Thread {
     }
 
     public void chew() {
-        System.out.println("Philosopher " + index + ": eating");
+        System.out.println("Philosopher " + index + " eating");
         pause();
     }
 
